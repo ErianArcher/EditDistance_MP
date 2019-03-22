@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "edit_distance.h"
+#include <stdio.h>
 
 typedef unsigned int uint;
 
@@ -13,6 +14,8 @@ uint **init_2D_matrix(int width, int height);
 void delete_2D_matrix(uint **_2Dm, int width);
 
 void fill_dp_matrix(uint **dp_m, const char *X, const char *Y);
+
+void printMatrix(uint **dp_m, const int width, const int height);
 
 
 uint min(uint i, uint i1, uint i2);
@@ -50,6 +53,7 @@ int cal_edit_distance(const char *X, const char *Y) {
     // Fill dynamic programming matrix
     fill_dp_matrix(dp_matrix, X, Y);
     edit_distance = dp_matrix[lenX][lenY]; // The last item of the matrix is the edit distance.
+    printMatrix(dp_matrix, lenX+1, lenY+1);
 
     delete_2D_matrix(dp_matrix, lenX+1);
     return edit_distance;
@@ -70,7 +74,7 @@ void fill_dp_matrix(uint **dp_m, const char *X, const char *Y) {
 
     for (int i = 1; i < h; i++) {
         for (int j = 1; j < w; j++) {
-            if (X[j] == Y[i])
+            if (X[j-1] == Y[i-1])
             {
                 dp_m[j][i] = min(dp_m[j-1][i-1], dp_m[j-1][i], dp_m[j][i-1]);
             } else {
@@ -82,5 +86,14 @@ void fill_dp_matrix(uint **dp_m, const char *X, const char *Y) {
 
 uint min(uint i, uint i1, uint i2) {
     return (((i < i1)? i : i1) < i2) ? : i2;
+}
+
+void printMatrix(uint **dp_m, const int width, const int height) {
+    for (int i = 0; i < width; ++i) {
+        for (int j = 0; j < height; ++j) {
+            printf("%u\t", dp_m[i][j]);
+        }
+        printf("\n");
+    }
 }
 
