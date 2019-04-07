@@ -72,20 +72,24 @@ void fill_dp_matrix(uint **dp_m, const char *X, const char *Y) {
         dp_m[i][0] = (uint) i;
     }
 
-    for (int i = 1; i < h; i++) {
-        for (int j = 1; j < w; j++) {
-            if (X[j-1] == Y[i-1])
+    for (int i = 1; i < w; i++) {
+        for (int j = 1; j < h; j++) {
+            if (X[i-1] == Y[j-1])
             {
-                dp_m[j][i] = min(dp_m[j-1][i-1], dp_m[j-1][i], dp_m[j][i-1]);
+                // uint tmp = min(dp_m[i-1][j-1], dp_m[i-1][j], dp_m[i][j-1]);
+                dp_m[i][j] = dp_m[i-1][j-1];
             } else {
-                dp_m[j][i] = min(dp_m[j-1][i-1], dp_m[j-1][i], dp_m[j][i-1]) + 1;
+                // uint tmp = min(dp_m[i-1][j-1], dp_m[i-1][j], dp_m[i][j-1]) + 1;
+                dp_m[i][j] = min(dp_m[i-1][j-1], dp_m[i-1][j], dp_m[i][j-1]) + 1;
             }
         }
     }
 }
 
 uint min(uint i, uint i1, uint i2) {
-    return (((i < i1)? i : i1) < i2) ? : i2;
+    uint minimum =(i <= i1)? i : i1;
+    minimum = (minimum <= i2)? minimum: i2;
+    return minimum;
 }
 
 void printMatrix(uint **dp_m, const int width, const int height) {
